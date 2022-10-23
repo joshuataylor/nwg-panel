@@ -19,7 +19,7 @@ class SwayTaskbar(Gtk.Box):
         check_key(settings, "mark-autotiling", True)
         check_key(settings, "mark-xwayland", True)
         check_key(settings, "angle", 0.0)
-        check_key(settings, "order-by-pid", False)
+        check_key(settings, "order-by-pid", True)
 
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=settings["workspaces-spacing"])
         self.settings = settings
@@ -216,8 +216,15 @@ class WindowBox(Gtk.EventBox):
 
     def on_click(self, widget, event, at_widget):
         if event.button == 1:
+            # focused = self.con.focused
+            # If the window is active, and in floating mode, we want to minimize it
+            # if self.con.focused and self.con.parent.layout == "floating":
+            #     nwg_panel.common.i3.command("floating toggle")
+
+            # If the window is minimised, we want to show it
             cmd = "[con_id=\"{}\"] focus".format(self.con.id)
             nwg_panel.common.i3.command(cmd)
+
         if event.button == 3:
             menu = self.context_menu(self.settings["workspace-menu"])
             menu.show_all()
